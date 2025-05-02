@@ -8,7 +8,7 @@
 int main(void) {
     DDRD|=0XFC; 
     DDRB|=0X0F; 
-    ADMUX|=(1<<REFS0)|(1<<MUX1);
+    ADMUX|=(1<<REFS0)|(1<<MUX1)|(1<<ADLAR);
     ADCSRA|=(1<<ADEN)|(1<<ADPS2);
     char alow=0;
     char ahigh=0;
@@ -22,11 +22,10 @@ int main(void) {
         //para terminar debo de valer a 0 la bandera
         ADCSRA|=(1<<ADIF);
         //PARA QUE EMPIECEN APAGADOS
-        PORTB&=~0X0F;
+       
         PORTD&=~0XFC;
-        PORTD|=(alow<<2);
-        PORTB|=(ahigh&0x03)<<2 | (alow>>6);
-        
-        
+        PORTB&=~0X0F;
+        PORTB|=((ahigh>>4)&0x0F);
+        PORTD|=((ahigh<<4) &(0xF0))|((alow>>4)&(0x0C));
     }
 }
